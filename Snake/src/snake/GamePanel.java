@@ -17,16 +17,13 @@ public class GamePanel extends JPanel implements Runnable {
 	final int screenHeight = numCol * cellSize;
 	
 	// FPS
-	int FPS = 60;
+	int FPS = 1;
 	
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
 	
-	// Set snake default position
-	int snakeX = 100;
-	int snakeY = 100;
-	// TODO: change to have typical automatic snake increment
-	int playerSpeed = 10;
+	Snake snake = new Snake();
+	
 	
 	public GamePanel() {
 		
@@ -69,24 +66,35 @@ public class GamePanel extends JPanel implements Runnable {
 		
 	}
 	
-	public void update() {
-		if(keyH.upPressed == true) {
-			snakeY -= playerSpeed;
-		} else if(keyH.downPressed == true) {
-			snakeY += playerSpeed;
-		} else if (keyH.leftPressed) {
-			snakeX -= playerSpeed;
-		} else if (keyH.rightPressed) {
-			snakeX += playerSpeed;
-		}
-		
-	}
+	
+	  public void update() {
+	  
+		  System.out.println(snake.getSnakeDirection());
+		  
+		  if(keyH.upPressed == true) { 
+			  snake.setSnakeDirection("up");
+		  } else if(keyH.downPressed == true) {
+			  snake.setSnakeDirection("down");
+		  } else if (keyH.leftPressed == true) {
+			  snake.setSnakeDirection("left");
+		  } else if (keyH.rightPressed == true) {
+			  snake.setSnakeDirection("right");
+		  }
+		  
+		  snake.updatePositions();
+	  
+	  }
+	 
 	
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
+		
+		// draw snake
 		g.setColor(Color.white);
-		g.fillRect(snakeX, snakeY, cellSize, cellSize);
+		for (SnakeComponent comp : snake.getSnakeComponents()) {
+			g.fillRect(comp.getX(), comp.getY(), SnakeComponent.getWidth(), SnakeComponent.getHeight());
+		}
 		g.dispose();
 	}
 	
