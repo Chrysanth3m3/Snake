@@ -16,12 +16,22 @@ public class GamePanel extends JPanel implements Runnable {
 	final int screenWidth = numRow * cellSize;
 	final int screenHeight = numCol * cellSize;
 	
+	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
+	
+	// Set snake default position
+	int snakeX = 100;
+	int snakeY = 100;
+	// TODO: change to have typical automatic snake increment
+	int playerSpeed = 10;
 	
 	public GamePanel() {
 		
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
+		this.setDoubleBuffered(true);
+		this.addKeyListener(keyH);
+		this.setFocusable(true);
 	}
 
 	public void startGameThread() {
@@ -36,13 +46,22 @@ public class GamePanel extends JPanel implements Runnable {
 			
 			System.out.println("The game is on.");
 			
-			//update();
+			update();
 			repaint();
 		}
 		
 	}
 	
 	public void update() {
+		if(keyH.upPressed == true) {
+			snakeY -= playerSpeed;
+		} else if(keyH.downPressed == true) {
+			snakeY += playerSpeed;
+		} else if (keyH.leftPressed) {
+			snakeX -= playerSpeed;
+		} else if (keyH.rightPressed) {
+			snakeX += playerSpeed;
+		}
 		
 	}
 	
@@ -50,7 +69,7 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		super.paintComponent(g);
 		g.setColor(Color.white);
-		g.fillRect(10, 10, cellSize, cellSize);
+		g.fillRect(snakeX, snakeY, cellSize, cellSize);
 		g.dispose();
 	}
 	
