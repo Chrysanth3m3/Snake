@@ -16,6 +16,9 @@ public class GamePanel extends JPanel implements Runnable {
 	final int screenWidth = numRow * cellSize;
 	final int screenHeight = numCol * cellSize;
 	
+	// FPS
+	int FPS = 60;
+	
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
 	
@@ -42,12 +45,26 @@ public class GamePanel extends JPanel implements Runnable {
 	@Override
 	public void run() {
 		
+		double drawInterval = 1000000000/FPS;
+		double delta = 0;
+		long lastTime = System.nanoTime();
+		long currentTime;
+		
+		
 		while(gameThread != null) {
 			
-			System.out.println("The game is on.");
+			currentTime = System.nanoTime();	
 			
-			update();
-			repaint();
+			delta += (currentTime - lastTime) / drawInterval;
+			
+			lastTime  = currentTime;
+			
+			if(delta >= 1) {
+				update();
+				repaint();
+				delta--;
+			}
+			
 		}
 		
 	}
